@@ -24,6 +24,7 @@ from sklearn.metrics import confusion_matrix
 from mpl_toolkits import mplot3d
 
 filename="Default.txt"
+filename2="genero.txt"
 
 
 
@@ -49,9 +50,7 @@ def main():
     #Imprimir data set despues de conversion
     #print(data_default)
 
-    print("######### KNN #########")
-
-
+    print("######### KNN to Default #########")
 
     #### PREPARAR DATA PARA KNN ###
 
@@ -95,5 +94,7 @@ def main():
     plt.legend(loc='upper left')
     plt.show()
    
+    print("######### KNN to genero #########")
 
+    
 main()
