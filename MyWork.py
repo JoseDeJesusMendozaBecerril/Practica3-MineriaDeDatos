@@ -80,8 +80,9 @@ def main():
         knn.fit(X_train,y_train) 
         y_predic = knn.predict(X_test)
         print(a)
-        data_Presition.append(knn.score(X_train,y_train))
+        data_Presition.append(knn.score(X_test,y_test))
         conf_matrix = confusion_matrix(y_test,y_predic)
+        print(conf_matrix)
 
 
     x = values
