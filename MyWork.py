@@ -4,12 +4,18 @@ import pandas as pd
 from sklearn import datasets,linear_model
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split #separa data
-
+import sklearn
 from sklearn.utils import resample
 from sklearn.metrics import mean_squared_error
 
 #KNN
 from sklearn.neighbors import NearestNeighbors
+from sklearn.neighbors import KNeighborsClassifier
+
+#MatrixConfusion
+
+from sklearn.metrics import confusion_matrix
+
 
 
 
@@ -29,9 +35,9 @@ def main():
 
     # Entendimiento de la data
     print('Informacion del data set')
-    print(data_default.shape)
+    """ print(data_default.shape)
     print(data_default.head(78))
-    print(data_default.columns)
+    print(data_default.columns) """
 
     #Convertir yes y no a 1 o 0
     data_default.loc[data_default['student'] == 'Yes' , 'student'] = 1
@@ -49,39 +55,44 @@ def main():
 
     #### PREPARAR DATA PARA KNN ###
 
-    #Defino entradas X Solamente la columna 6
-    X = data_default.iloc[:,2:4]
-    print(X)
+    #Define inputs X columns studen, balance and income
+    X = data_default.iloc[:,1:4]
 
-
-    #Defino Y
+    #Defino output
     y = data_default.iloc[:,0]
-    print(y)
 
 
     #Partimos los data sets
     X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2)
 
-    
-    #Defino el algoritmo a usar
-    neigh = NearestNeighbors(algorithm='auto',n_neighbors=2)
-
-
-    #Entreno al modelo
-    n = neigh.fit(X_train,y_train)
-    
-    distances,indices = n.kneighbors(X_train)
-    print(distances)
-    #y_test = y_test.values.reshape(1,-1)
-    #print(y_test)
-
-    #result = neigh.kneighbors(y_train[0].values,2,return_distance=False)
-    #print(result)
-    #precision = 0
+    values = [1,2,3,5,10,15,20,50,75,100]
+    data_Presition=[]
+    y_train=y_train.astype('int')
+    y_test=y_test.astype('int')
     
     
 
 
+    for a in values:
+        
+        knn = KNeighborsClassifier(algorithm='brute',n_neighbors=a)
+        
+        knn.fit(X_train,y_train) 
+        y_predic = knn.predict(X_test)
+        print(a)
+        data_Presition.append(knn.score(X_train,y_train))
+        conf_matrix = confusion_matrix(y_test,y_predic)
 
+
+    x = values
+    y = data_Presition
+
+    plt.scatter(x, y)
+    plt.title("KNN Clasifier")
+    plt.xlabel("Neighbors")
+    plt.ylabel("Precision")
+    plt.legend(loc='upper left')
+    plt.show()
+   
 
 main()
