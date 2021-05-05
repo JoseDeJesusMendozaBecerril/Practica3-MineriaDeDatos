@@ -64,7 +64,7 @@ def main():
     #Partimos los data sets
     X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2)
 
-    values = [3]
+    values = [1,2,3,5,10,15,20,50,75,100]
     data_Presition=[]
     y_train=y_train.astype('int')
     y_test=y_test.astype('int')
@@ -91,7 +91,7 @@ def main():
     y = data_Presition
 
     plt.scatter(x, y)
-    plt.title("KNN Clasifier")
+    plt.title("KNN Clasifier data Default")
     plt.xlabel("Neighbors")
     plt.ylabel("Precision")
     plt.legend(loc='upper left')

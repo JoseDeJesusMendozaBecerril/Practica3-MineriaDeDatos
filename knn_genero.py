@@ -81,15 +81,15 @@ def main():
         conf_matrix = confusion_matrix(y_test,y_predic)
         print(conf_matrix)
     
-    """ x = values
+    x = values
     y = data_Presition
 
     plt.scatter(x, y)
-    plt.title("KNN Clasifier")
+    plt.title("KNN Clasifier genero")
     plt.xlabel("Neighbors")
     plt.ylabel("Precision")
     plt.legend(loc='upper left')
-    plt.show() """
+    plt.show()
    
     print("######### Grafica genero #########")
 
