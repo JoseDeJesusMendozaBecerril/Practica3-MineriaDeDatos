@@ -7,10 +7,17 @@ from sklearn.model_selection import train_test_split #separa data
 import sklearn
 from sklearn.utils import resample
 from sklearn.metrics import mean_squared_error
+from sklearn.metrics import roc_curve, roc_auc_score
 
 #KNN
 from sklearn.neighbors import NearestNeighbors
 from sklearn.neighbors import KNeighborsClassifier
+
+#logistic regresion
+from sklearn.linear_model import LogisticRegression
+
+#Naive Bayes
+from sklearn.naive_bayes import GaussianNB
 
 #MatrixConfusion
 
@@ -24,10 +31,6 @@ from sklearn.metrics import confusion_matrix
 from mpl_toolkits import mplot3d
 
 filename="Default.txt"
-filename2="genero.txt"
-
-
-
 
 def main():
     
@@ -64,37 +67,49 @@ def main():
     #Partimos los data sets
     X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2)
 
-    values = [3]
-    data_Presition=[]
     y_train=y_train.astype('int')
     y_test=y_test.astype('int')
+
+    clf = LogisticRegression()
+    clf.fit(X_train, y_train)
+
+    y_score1 = clf.predict_proba(X_test)[:,1]
+
+    false_positive_rate1, true_positive_rate1, threshold1 = roc_curve(y_test, y_score1)
+    print('roc_auc_score for logistic regresion: ', roc_auc_score(y_test, y_score1))
+
+
+    knn = KNeighborsClassifier(algorithm='brute',n_neighbors=75)
+    knn.fit(X_train,y_train) 
+
+    y_score2 = knn.predict_proba(X_test)[:,1]
+
+    false_positive_rate2, true_positive_rate2, threshold2 = roc_curve(y_test, y_score2)
+    print('roc_auc_score for KNN: ', roc_auc_score(y_test, y_score2))
+
+
+    NB = GaussianNB()
+    NB.fit(X_train, y_train)
+    y_score3 = NB.predict_proba(X_test)[:,1]
+
+    false_positive_rate3, true_positive_rate3, threshold3 = roc_curve(y_test, y_score3)
+    print('roc_auc_score for Naive Bayes: ', roc_auc_score(y_test, y_score3))
+
+
+    plt.subplots(1, figsize=(10,10))
+    plt.title('ROC for data Deafult')
     
+    plt.plot(false_positive_rate1, true_positive_rate1,color="blue")
+    plt.plot(false_positive_rate2, true_positive_rate2, color="red")
+    plt.plot(false_positive_rate3, true_positive_rate3, color="green")
+
+    plt.plot([0, 1], ls="solid")
+    plt.plot([0, 0], [1, 0] , c=".7"), plt.plot([1, 1] , c=".7")
     
+    plt.ylabel('True Positive Rate')
+    plt.xlabel('False Positive Rate')
 
-
-    for a in values:
-        
-        knn = KNeighborsClassifier(algorithm='brute',n_neighbors=a)
-        
-        knn.fit(X_train,y_train) 
-        y_predic = knn.predict(X_test)
-        print(a)
-        data_Presition.append(knn.score(X_test,y_test))
-        conf_matrix = confusion_matrix(y_test,y_predic)
-        print(conf_matrix)
-
-    print(data_Presition)
-    x = values
-    y = data_Presition
-
-    plt.scatter(x, y)
-    plt.title("KNN Clasifier")
-    plt.xlabel("Neighbors")
-    plt.ylabel("Precision")
-    plt.legend(loc='upper left')
+    plt.legend(["Logistic regresion", "KNN"," Naive Bayes"])
     plt.show()
-   
-    print("######### KNN to genero #########")
 
-    
 main()
