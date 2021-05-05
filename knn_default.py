@@ -73,12 +73,15 @@ def main():
 
 
     for a in values:
-        
+        #DEFINICION DEL MODELO   
         knn = KNeighborsClassifier(algorithm='brute',n_neighbors=a)
-        
+
+        #ENTRENAMIENTO
         knn.fit(X_train,y_train) 
         y_predic = knn.predict(X_test)
         print(a)
+        
+        #CALCULO PRECISIONES
         data_Presition.append(knn.score(X_test,y_test))
         conf_matrix = confusion_matrix(y_test,y_predic)
         print(conf_matrix)
